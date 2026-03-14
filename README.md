@@ -7,9 +7,9 @@ Lanzar paquete: ros2 launch mpc_turtlebot launcher.launch.py
 
 
 Tareas:
-- Servicio de inicio tras dibujo de trayectoria
-- Mejorar el seguimiento de línea
-- Documentar código a detalle (explicar en paper cómo funciona el código) (Adrián y _____)
-- Manual de instrucciones de uso en el github (Adrián)
-- Realizar pruebas y graficar error promedio vs error esperado (Adrián)
-- Realizar experimento con motor DC (Emolio)
+- Servicio de inicio tras dibujo de trayectoria (Alan) PENDIENTE
+- Mejorar el seguimiento de línea (Diego) LISTO
+- Documentar código a detalle (explicar en paper cómo funciona el código) (Adrián y Alan) PENDIENTE
+- Manual de instrucciones de uso en el github (Adrián) PENDIENTE
+- Realizar pruebas y graficar error promedio vs error esperado (Adrián) PENDIENTE
+- Realizar experimento con motor DC (Emolio) PENDIENTE
