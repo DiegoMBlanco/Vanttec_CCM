@@ -47,18 +47,18 @@ class TurtlebotMPC(Node):
         # ==============================
         # 2. Costos
         # ==============================
-        Q  = sparse.diags([100., 1., 100., 1.])
+        Q  = sparse.diags([200., 1., 200., 1.])
         QN = sparse.diags([200., 1., 200., 1.])
-        R  = 1.0 * sparse.eye(self.nu)
+        R  = 1.5 * sparse.eye(self.nu)
 
         # ==============================
         # 3. Restricciones físicas Turtlebot3
         # ==============================
-        self.umin = np.array([-0.5, -0.5])
-        self.umax = np.array([ 0.5,  0.5])
+        self.umin = np.array([-0.4, -0.4])
+        self.umax = np.array([ 0.4,  0.4])
 
-        self.xmin = np.array([-np.inf, -0.5, -np.inf, -0.5])
-        self.xmax = np.array([ np.inf,  0.5,  np.inf,  0.5])
+        self.xmin = np.array([-np.inf, -0.4, -np.inf, -0.4])
+        self.xmax = np.array([ np.inf,  0.4,  np.inf,  0.4])
 
         # ==============================
         # 4. Estado, path y yaw
@@ -218,8 +218,8 @@ class TurtlebotMPC(Node):
         ax, ay = float(u_opt[0]), float(u_opt[1])
 
         # Velocidades cartesianas predichas (integración 1 paso)
-        vx_next = float(np.clip(self.x0[1] + ax * self.Ts, -0.5, 0.5))
-        vy_next = float(np.clip(self.x0[3] + ay * self.Ts, -0.5, 0.5))
+        vx_next = float(np.clip(self.x0[1] + ax * self.Ts, -0.4, 0.4))
+        vy_next = float(np.clip(self.x0[3] + ay * self.Ts, -0.4, 0.4))
 
         # Magnitud de velocidad lineal deseada
         v_mag = math.sqrt(vx_next**2 + vy_next**2)
@@ -240,10 +240,10 @@ class TurtlebotMPC(Node):
         if abs(yaw_error) > YAW_THRESH:
             v_cmd = 0.0  # girar en sitio primero
         else:
-            v_cmd = float(np.clip(v_mag, 0.0, 0.5))
+            v_cmd = float(np.clip(v_mag, 0.0, 0.4))
 
         # Ganancia angular más alta para alinearse rápido
-        omega_cmd = float(np.clip(4.0 * yaw_error, -1.5, 1.5))
+        omega_cmd = float(np.clip(10.0 * yaw_error, -2.5, 2.5))
 
         twist = Twist()
         twist.linear.x  = v_cmd
