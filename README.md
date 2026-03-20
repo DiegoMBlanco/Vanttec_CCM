@@ -58,7 +58,14 @@ ros2 launch turtlebot3_cartographer cartographer.launch.py
 ros2 launch mpc_turtlebot launcher.launch.py
 ```
 
-4. Finally, go back to Rviz and publish the reference points for the trajectory (try to do this as quickly as you can to achieve a continuous path!)
+4. Go back to Rviz and publish the reference points for the trajectory. When the path is ready, call the start service with the command:
+```bash
+ros2 service call /start_execution std_srvs/srv/Empty {}
+```
+4. Finally, to erase the path and start drawing again, run the next command:
+```bash
+ros2 service call /clear_drawn_plan std_srvs/srv/Empty {}
+```
 
 ### Mini troubleshooting guide:
 
