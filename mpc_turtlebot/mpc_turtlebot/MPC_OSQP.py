@@ -7,6 +7,7 @@ import numpy as np
 import osqp
 from scipy import sparse
 from scipy.signal import cont2discrete
+from std_srvs.srv import Empty
 
 
 class TurtlebotMPC(Node):
@@ -43,6 +44,11 @@ class TurtlebotMPC(Node):
         self.nx = 4   # [px, vx, py, vy]
         self.nu = 2   # [ax, ay]
         self.N  = 20
+
+        # Estado de ejecución
+        self.executing = False
+        self.srv_start = self.create_service(Empty, '/start_execution', self.start_cb)
+        self.get_logger().info("Llama /start_execution para comenzar.")
 
         # ==============================
         # 2. Costos
@@ -131,7 +137,23 @@ class TurtlebotMPC(Node):
             for pose in msg.poses
         ]
         self.target_idx = 0
+        self.executing = False # nuevo path → esperar /start de nuevo
         self.get_logger().info(f"Path recibido: {len(self.path)} puntos")
+        
+        
+    # ==================================
+    # Callback: Inicio del Recorrido
+    # ==================================
+    def start_cb(self, request, response):
+
+        if not self.path:
+            self.get_logger().warn("Sin path. Dibuja uno primero.")
+            return response
+
+        self.executing = True
+        self.target_idx = 0
+        self.get_logger().info("Ejecución iniciada.")
+        return response
 
     # ==================================
     # Callback: odometría
@@ -186,7 +208,10 @@ class TurtlebotMPC(Node):
         if not self.path:
             self.pub_cmd.publish(Twist())
             return
-
+        
+        if not self.executing:
+            return # espera el /start_execution
+        
         xr = self.update_target()
         if xr is None:
             self.pub_cmd.publish(Twist())
