@@ -132,11 +132,11 @@ class TurtlebotMPC(Node):
         self.timer = self.create_timer(self.Ts, self.control_loop)
 
         # ==============================
-        # Archivo de métricas
+        # Archivo de métricas -> Generar archivos de métricas de desempeño ()
         # ==============================
-        self.error_file = open('mpc_error_log.csv', mode='w', newline='')
-        self.csv_writer = csv.writer(self.error_file)
-        self.csv_writer.writerow(['tiempo', 'error_posicion', 'error_yaw'])
+        #self.error_file = open('mpc_error_log.csv', mode='w', newline='')
+        #self.csv_writer = csv.writer(self.error_file)
+        #self.csv_writer.writerow(['tiempo', 'error_posicion', 'error_yaw'])
         self.start_time = 0.0
 
         self.get_logger().info("TurtlebotMPC listo, esperando path...")
@@ -297,7 +297,7 @@ class TurtlebotMPC(Node):
 
         #Guardamos el tiempo transcurrido y ambos errores
         t_actual = time.time() - self.start_time
-        self.csv_writer.writerow([t_actual, error_posicion, yaw_error])
+        # self.csv_writer.writerow([t_actual, error_posicion, yaw_error]) Uncomment this sectino to generate the .csv file with error metrics
         
         self.get_logger().info(
             f"wp={self.target_idx} "
