@@ -9,6 +9,10 @@ from scipy import sparse
 from scipy.signal import cont2discrete
 from std_srvs.srv import Empty
 
+# Librerías para importar datos de error y métricas de desempeño
+import time
+import csv
+
 
 class TurtlebotMPC(Node):
 
@@ -126,6 +130,15 @@ class TurtlebotMPC(Node):
         self.pub_cmd  = self.create_publisher(  Twist,     "/cmd_vel",                  10)
 
         self.timer = self.create_timer(self.Ts, self.control_loop)
+
+        # ==============================
+        # Archivo de métricas
+        # ==============================
+        self.error_file = open('mpc_error_log.csv', mode='w', newline='')
+        self.csv_writer = csv.writer(self.error_file)
+        self.csv_writer.writerow(['tiempo', 'error_posicion', 'error_yaw'])
+        self.start_time = 0.0
+
         self.get_logger().info("TurtlebotMPC listo, esperando path...")
 
     # ==================================
@@ -152,6 +165,7 @@ class TurtlebotMPC(Node):
 
         self.executing = True
         self.target_idx = 0
+        self.start_time = time.time()
         self.get_logger().info("Ejecución iniciada.")
         return response
 
@@ -275,6 +289,16 @@ class TurtlebotMPC(Node):
         twist.angular.z = omega_cmd
         self.pub_cmd.publish(twist)
 
+        # ==================================
+        # Registro de métricas
+        # ==================================
+        # xr[0] es la X de referencia, xr[2] es la Y de referencia
+        error_posicion = math.hypot(xr[0] - self.x0[0], xr[2] - self.x0[2])
+
+        #Guardamos el tiempo transcurrido y ambos errores
+        t_actual = time.time() - self.start_time
+        self.csv_writer.writerow([t_actual, error_posicion, yaw_error])
+        
         self.get_logger().info(
             f"wp={self.target_idx} "
             f"pos=({self.x0[0]:.2f},{self.x0[2]:.2f}) "
