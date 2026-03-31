@@ -15,18 +15,16 @@ class AckermannMPC(Node):
     def __init__(self):
         super().__init__('ackermann_mpc_node')
 
-        # --- Parámetros del Vehículo ---
-        self.L = 1.511421          # Distancia entre ejes (Wheelbase)
-        self.v_ref = 1.0      # Velocidad lineal constante (m/s)
-        self.Ts = 0.1         # Tiempo de muestreo (un poco más alto para estabilidad)
-        self.N = 15           # Horizonte de predicción
+        # Parámetros del Vehículo 
+        self.L = 1.511421    # Distancia entre ejes (Wheelbase) definida en ackermann.xacro. Reemplazar por su valor real.
+        self.v_ref = 1.0     # Velocidad lineal constante (m/s)
+        self.Ts = 0.1        # Tiempo de muestreo 
+        self.N = 15          # Horizonte de predicción
         
-        self.nx = 2           # Estados: [crosstrack_error (ey), heading_error (e_psi)]
-        self.nu = 1           # Entrada: [steering_angle (delta)]
+        self.nx = 2          # Estados: [crosstrack_error (e_y), heading_error (e_psi)]
+        self.nu = 1          # Entrada: [steering_angle (delta)]
 
-        # --- 1. Modelo de Error Linealizado (Espacio de Estados) ---
-        # dot_ey    = v * sin(e_psi)  -> v * e_psi (small angle approx)
-        # dot_epsi  = v/L * tan(delta) -> v/L * delta
+        # Modelo de Error Linealizado
         Ac = np.array([[0.0, self.v_ref],
                        [0.0, 0.0]])
         Bc = np.array([[0.0],
@@ -37,23 +35,22 @@ class AckermannMPC(Node):
         self.Ad = sparse.csc_matrix(Ad)
         self.Bd = sparse.csc_matrix(Bd)
 
-        # --- 2. Pesos del MPC ---
-        Q = sparse.diags([40.0, 10.0])   # Penaliza error lateral y de ángulo  40 10
+        # Pesos del MPC
+        Q = sparse.diags([40.0, 10.0])   # Penaliza error lateral y de ángulo  
         QN = sparse.diags([40.0, 10.0])  # Costo terminal
-        R = 10.0 * sparse.eye(self.nu)    # Penaliza uso excesivo de volante  5.0 a 0.8v
+        R = 10.0 * sparse.eye(self.nu)    # Penaliza uso excesivo de volante  
 
-        # --- 3. Restricciones ---
-        self.delta_max = 0.6  # ~35 grados de giro máximo
+        # Restricciones 
+        self.delta_max = 0.6  
         self.umin = np.array([-self.delta_max])
         self.umax = np.array([ self.delta_max])
         
         self.xmin = np.array([-np.inf, -np.inf])
         self.xmax = np.array([ np.inf,  np.inf])
 
-        # --- 4. Configuración OSQP (Estructura Fija) ---
+        # Configuración OSQP 
         self.setup_osqp(Q, QN, R)
 
-        # --- ROS 2 Setup ---
         self.x_robot = 0.0
         self.y_robot = 0.0
         self.yaw_robot = 0.0
@@ -62,7 +59,7 @@ class AckermannMPC(Node):
         self.executing = False
 
         self.sub_path = self.create_subscription(Path, "/drawn_plan", self.path_cb, 10)
-        self.sub_odom = self.create_subscription(Odometry, "/r1/odom", self.odom_cb, 10)
+        self.sub_odom = self.create_subscription(Odometry, "/r1/odom", self.odom_cb, 10) # se incluye el namespace de la simulación del ackermann. Ajustar a su tópico correspondiente
         self.pub_cmd = self.create_publisher(Twist, "/r1/cmd_vel", 10)
         self.srv_start = self.create_service(Empty, '/start_execution', self.start_cb)
         
@@ -76,7 +73,7 @@ class AckermannMPC(Node):
             sparse.kron(sparse.eye(self.N), R)
         ], format='csc')
 
-        # Vector q (Lineal - se actualiza en el loop)
+        # Vector q 
         self.q_vec = np.zeros((self.N + 1) * self.nx + self.N * self.nu)
 
         # Matriz Aeq (Dinámica del sistema: x_{k+1} = Ad*x_k + Bd*u_k)
@@ -121,7 +118,7 @@ class AckermannMPC(Node):
         """Calcula Crosstrack Error (ey) y Heading Error (epsi)"""
         if not self.path: return 0.0, 0.0
         
-        # 1. Buscar punto más cercano
+        # Buscar punto más cercano
         dx = [self.x_robot - p[0] for p in self.path[self.target_idx:self.target_idx+20]]
         dy = [self.y_robot - p[1] for p in self.path[self.target_idx:self.target_idx+20]]
         dist = np.hypot(dx, dy)
@@ -130,18 +127,17 @@ class AckermannMPC(Node):
         
         ref_x, ref_y = self.path[self.target_idx]
         
-        # 2. Calcular ángulo deseado (tangente a la ruta)
+        # Calcular ángulo deseado (tangente a la ruta)
         if self.target_idx < len(self.path) - 1:
             next_p = self.path[self.target_idx + 1]
             ref_yaw = math.atan2(next_p[1] - ref_y, next_p[0] - ref_x)
         else:
             ref_yaw = self.yaw_robot
 
-        # 3. Error de orientación (normalizado)
+        # Error de orientación (normalizado)
         e_psi = math.atan2(math.sin(self.yaw_robot - ref_yaw), math.cos(self.yaw_robot - ref_yaw))
 
-        # 4. Crosstrack Error (Proyección perpendicular)
-        # cte = (y_robot - y_ref) * cos(ref_yaw) - (x_robot - x_ref) * sin(ref_yaw)
+        # Crosstrack Error (Proyección perpendicular)
         cte = (self.y_robot - ref_y) * math.cos(ref_yaw) - (self.x_robot - ref_x) * math.sin(ref_yaw)
 
         return cte, e_psi
@@ -165,12 +161,10 @@ class AckermannMPC(Node):
             return
 
         # Extraer primer control (steering angle delta)
-        # En el vector de solución x, los controles están después de los estados (N+1)*nx
         start_u = (self.N + 1) * self.nx
         delta = res.x[start_u]
 
         # Enviar comandos
-        # Para Ackermann simulado en ROS, twist.angular.z suele representar el steering o se mapea
         t = Twist()
         t.linear.x = self.v_ref
         t.angular.z = float(delta) 
