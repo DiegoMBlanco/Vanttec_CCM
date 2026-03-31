@@ -109,7 +109,7 @@ ros2 service call /start_execution std_srvs/srv/Empty {}
 4. Finally, to erase the path and start drawing again, run the next command:
 ```bash
 ros2 service call /clear_drawn_plan std_srvs/srv/Empty {}
-
+```
 ### Mini troubleshooting guide:
 
 - Remember to always execute the `colcon build` and `source install/setup.bash` commands before launching the MPC node.
