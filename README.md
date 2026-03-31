@@ -37,7 +37,7 @@ source install/setup.bash
 
 **Now you should be all set**
 ---
-## How to use our repository (Demo)
+## How to use our repository for turtlebot (Demo)
 
 1. Open one terminal and type the following commands to open the gazebo simulation:
 
@@ -67,6 +67,49 @@ ros2 service call /start_execution std_srvs/srv/Empty {}
 ros2 service call /clear_drawn_plan std_srvs/srv/Empty {}
 ```
 
+## How to use our repository for Ackermann (Demo)
+### Pre-requisites and Ignition installation
+
+It is assumed that any distro of ROS 2 is already installed.
+To avoid possible errors, please update your system and install the following ROS 2 dependencies.
+
+```bash
+sudo apt-get update
+sudo apt-get install ros-$ROS_DISTRO-joint-state-publisher ros-$ROS_DISTRO-xacro ros-$ROS_DISTRO-joint-state-publisher-gui ros-$ROS_DISTRO-tf2-* ros-$ROS_DISTRO-rviz-default-plugins
+```
+
+To install Ignition to work with ROS 2, run the following command:
+
+```bash
+sudo apt-get install ros-$ROS_DISTRO-ros-gz
+```
+Additionally, to be able to communicate our simulation with ROS 2, it is needed to use a package called 'ros_gz_bridge'. This package provides a network bridge which enables the exchange of messages between ROS 2 and Gazebo transport. You can install this package by typing:
+
+```bash
+sudo apt-get install ros-$ROS_DISTRO-ros-ign-bridge
+```
+
+1. Open one terminal and type the following commands to open the ignition gazebo simulation:
+
+```bash
+ros2 launch mpc_ackermann simulation_launcher.launch.py
+```
+
+2. In a new terminal, launch the MPC controller and path drawer nodes:
+
+```bash
+ros2 launch mpc_ackermann MPC_launcher.launch.py.launch.py
+```
+
+3. Go back to Rviz and publish the reference points for the trajectory. When the path is ready, call the start service with the command:
+```bash
+ros2 service call /start_execution std_srvs/srv/Empty {}
+```
+
+4. Finally, to erase the path and start drawing again, run the next command:
+```bash
+ros2 service call /clear_drawn_plan std_srvs/srv/Empty {}
+
 ### Mini troubleshooting guide:
 
 - Remember to always execute the `colcon build` and `source install/setup.bash` commands before launching the MPC node.
@@ -82,6 +125,7 @@ ros2 service call /clear_drawn_plan std_srvs/srv/Empty {}
 
 Currently, this repository contains two main components:
 
+* **`mpc_ackermann` (Simulation):** A fully functional ROS 2 package that uses a self modeled .xacro ackermann model as an example to demonstrate the MPC algorithm tracking a reference in a simulated environment. We recommend using this package to test the algorithm safely.
 * **`mpc_turtlebot` (Simulation):** A fully functional ROS 2 package that uses the Turtlebot3 as an example to demonstrate the MPC algorithm tracking a reference in a simulated environment. We recommend using this package to test the algorithm safely.
 * **`mpc_dc_motor` (Hardware - WIP):** This package contains the implementation for a physical DC motor communicating via microROS. *Note: We are currently migrating to a new motor model, so this package is under active testing and might be temporarily incomplete.*
 ---
