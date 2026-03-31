@@ -7,6 +7,11 @@ import numpy as np
 import osqp
 from scipy import sparse
 from scipy.signal import cont2discrete
+from std_srvs.srv import Empty
+
+# Librerías para importar datos de error y métricas de desempeño
+import time
+import csv
 
 
 class TurtlebotMPC(Node):
@@ -43,6 +48,11 @@ class TurtlebotMPC(Node):
         self.nx = 4   # [px, vx, py, vy]
         self.nu = 2   # [ax, ay]
         self.N  = 20
+
+        # Estado de ejecución
+        self.executing = False
+        self.srv_start = self.create_service(Empty, '/start_execution', self.start_cb)
+        self.get_logger().info("Llama /start_execution para comenzar.")
 
         # ==============================
         # 2. Costos
@@ -120,6 +130,15 @@ class TurtlebotMPC(Node):
         self.pub_cmd  = self.create_publisher(  Twist,     "/cmd_vel",                  10)
 
         self.timer = self.create_timer(self.Ts, self.control_loop)
+
+        # ==============================
+        # Archivo de métricas -> Generar archivos de métricas de desempeño ()
+        # ==============================
+        #self.error_file = open('mpc_error_log.csv', mode='w', newline='')
+        #self.csv_writer = csv.writer(self.error_file)
+        #self.csv_writer.writerow(['tiempo', 'error_posicion', 'error_yaw'])
+        self.start_time = 0.0
+
         self.get_logger().info("TurtlebotMPC listo, esperando path...")
 
     # ==================================
@@ -131,7 +150,24 @@ class TurtlebotMPC(Node):
             for pose in msg.poses
         ]
         self.target_idx = 0
+        self.executing = False # nuevo path → esperar /start de nuevo
         self.get_logger().info(f"Path recibido: {len(self.path)} puntos")
+        
+        
+    # ==================================
+    # Callback: Inicio del Recorrido
+    # ==================================
+    def start_cb(self, request, response):
+
+        if not self.path:
+            self.get_logger().warn("Sin path. Dibuja uno primero.")
+            return response
+
+        self.executing = True
+        self.target_idx = 0
+        self.start_time = time.time()
+        self.get_logger().info("Ejecución iniciada.")
+        return response
 
     # ==================================
     # Callback: odometría
@@ -186,7 +222,10 @@ class TurtlebotMPC(Node):
         if not self.path:
             self.pub_cmd.publish(Twist())
             return
-
+        
+        if not self.executing:
+            return # espera el /start_execution
+        
         xr = self.update_target()
         if xr is None:
             self.pub_cmd.publish(Twist())
@@ -250,6 +289,16 @@ class TurtlebotMPC(Node):
         twist.angular.z = omega_cmd
         self.pub_cmd.publish(twist)
 
+        # ==================================
+        # Registro de métricas
+        # ==================================
+        # xr[0] es la X de referencia, xr[2] es la Y de referencia
+        error_posicion = math.hypot(xr[0] - self.x0[0], xr[2] - self.x0[2])
+
+        #Guardamos el tiempo transcurrido y ambos errores
+        t_actual = time.time() - self.start_time
+        # self.csv_writer.writerow([t_actual, error_posicion, yaw_error]) Uncomment this sectino to generate the .csv file with error metrics
+        
         self.get_logger().info(
             f"wp={self.target_idx} "
             f"pos=({self.x0[0]:.2f},{self.x0[2]:.2f}) "
