@@ -8,7 +8,7 @@ import math
 
 # --- CONFIGURACIÓN ---
 # Ruta a la CARPETA del bag (donde está el archivo .db3 o .mcap y el metadata.yaml)
-BAG_PATH = 'rosbag2_2026_05_06-00_56_55_0.db3' 
+BAG_PATH = 'mi_prueba_mpc_0.db3' 
 
 def get_rosbag_options(path, storage_id='sqlite3'):
     storage_options = rosbag2_py.StorageOptions(uri=path, storage_id=storage_id)
@@ -33,7 +33,8 @@ def run_analysis():
     # Diccionarios para almacenar datos
     data = {
         'time': [], 'x': [], 'y': [], 'v': [], 'w': [],
-        'cte': [], 'epsi': [], 'path_x': [], 'path_y': []
+        'cte': [], 'epsi': [], 'path_x': [], 'path_y': [],
+        'solve_time': []
     }
 
     # Mapa de tipos de mensaje
@@ -42,7 +43,8 @@ def run_analysis():
         '/drawn_plan': 'nav_msgs/msg/Path',
         '/r1/cmd_vel': 'geometry_msgs/msg/Twist',
         '/CTE': 'std_msgs/msg/Float32',
-        '/e_psi': 'std_msgs/msg/Float32'
+        '/e_psi': 'std_msgs/msg/Float32',
+        '/solve_time_ms': 'std_msgs/msg/Float32'
     }
 
     print("Leyendo mensajes...")
@@ -69,6 +71,8 @@ def run_analysis():
         elif topic == '/drawn_plan':
             data['path_x'] = [p.pose.position.x for p in msg.poses]
             data['path_y'] = [p.pose.position.y for p in msg.poses]
+        elif topic == '/solve_time_ms':
+            data['solve_time'].append(msg.data)
 
     # --- CÁLCULO DE ZERO CROSSINGS ---
     def get_zero_crossings(signal):
@@ -81,11 +85,11 @@ def run_analysis():
    # --- GENERACIÓN DE GRÁFICAS (REORGANIZADO) ---
     print("Generando gráficas...")
     plt.style.use('ggplot') # Estilo estándar que siempre funciona
-    fig = plt.figure(figsize=(16, 12))
+    fig = plt.figure(figsize=(16, 16))
     fig.suptitle(f'Métricas de Desempeño MPC - Bag: {os.path.basename(BAG_PATH)}', fontsize=16)
 
     # 1. Trayectoria (XY) - Ocupa la columna izquierda completa
-    ax1 = plt.subplot(3, 2, (1, 3)) 
+    ax1 = plt.subplot(4, 2, (1, 3)) 
     if data['path_x']:
         ax1.plot(data['path_x'], data['path_y'], 'r--', label='Trayectoria Deseada', alpha=0.8)
     ax1.plot(data['x'], data['y'], 'b-', label='Trayectoria Seguida (Odom)', linewidth=1.5)
@@ -96,7 +100,7 @@ def run_analysis():
     ax1.grid(True)
 
     # 2. CTE + Zero Crossings
-    ax2 = plt.subplot(3, 2, 2)
+    ax2 = plt.subplot(4, 2, 2)
     if len(data['cte']) > 0:
         cte_np = np.array(data['cte'])
         ax2.plot(cte_np, 'g-', label='CTE (m)', alpha=0.6)
@@ -109,7 +113,7 @@ def run_analysis():
     ax2.grid(True)
 
     # 3. Heading Error (e_psi) - Centro Derecha
-    ax3 = plt.subplot(3, 2, 4)
+    ax3 = plt.subplot(4, 2, 4)
     if len(data['epsi']) > 0:
         ax3.plot(data['epsi'], 'orange', label='e_psi (rad)')
         ax3.set_ylabel('Radianes')
@@ -117,7 +121,7 @@ def run_analysis():
     ax3.grid(True)
 
     # 4. Velocidad Lineal - Abajo Izquierda
-    ax4 = plt.subplot(3, 2, 5)
+    ax4 = plt.subplot(4, 2, 5)
     if data['v']:
         ax4.plot(data['v'], 'k-', label='v (m/s)')
     ax4.set_title('Velocidad Lineal (v)')
@@ -126,7 +130,7 @@ def run_analysis():
     ax4.grid(True)
 
     # 5. Control de Dirección (Angular) - Abajo Derecha
-    ax5 = plt.subplot(3, 2, 6)
+    ax5 = plt.subplot(4, 2, 6)
     if data['w']:
         ax5.plot(data['w'], 'purple', label='w (rad/s)')
     ax5.set_title('Control Angular (w)')
@@ -134,7 +138,24 @@ def run_analysis():
     ax5.set_ylabel('rad/s')
     ax5.grid(True)
 
+    # 6. Costo computacional
+    ax6 = plt.subplot(4, 2, (7, 8))   # ocupa todo el ancho abajo
+    if data['solve_time']:
+        st = np.array(data['solve_time'])
+        ax6.plot(st, 'teal', label='Solve time (ms)', alpha=0.7)
+        ax6.axhline(y=np.mean(st), color='red', linestyle='--',
+                    label=f'Media: {np.mean(st):.2f} ms')
+        ax6.axhline(y=np.max(st), color='orange', linestyle=':',
+                    label=f'Máx: {np.max(st):.2f} ms')
+        ax6.set_ylabel('ms')
+    ax6.set_title('Costo Computacional OSQP (solve time)')
+    ax6.set_xlabel('Muestras')
+    ax6.legend()
+    ax6.grid(True)
+
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.show()
+
+
 if __name__ == '__main__':
     run_analysis()
