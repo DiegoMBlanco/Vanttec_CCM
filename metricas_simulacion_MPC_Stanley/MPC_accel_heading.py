@@ -6,6 +6,7 @@ from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry, Path
 import numpy as np
 import osqp
+import time
 from scipy import sparse
 from scipy.signal import cont2discrete
 from std_srvs.srv import Empty
@@ -56,6 +57,7 @@ class AckermannMPC(Node):
         self.pub_cmd = self.create_publisher(Twist, "/r1/cmd_vel", 10)
         self.pub_CTE = self.create_publisher(Float32, "/CTE", 10)
         self.pub_e_psi = self.create_publisher(Float32, "/e_psi", 10)
+        self.pub_solve_time = self.create_publisher(Float32, "/solve_time_ms", 10)
         self.srv_start = self.create_service(Empty, '/start_execution', self.start_cb)
         
         self.timer = self.create_timer(self.Ts, self.control_loop)
@@ -213,7 +215,13 @@ class AckermannMPC(Node):
         self.prob.update(l=np.hstack([-current_state, np.zeros(self.N * self.nx), np.tile(self.xmin, self.N+1), np.tile(self.umin, self.N)]),
                          u=np.hstack([-current_state, np.zeros(self.N * self.nx), np.tile(self.xmax, self.N+1), np.tile(self.umax, self.N)]))
         
-        res = self.prob.solve()
+        # ── Medir tiempo de solución ──────────────────────────────────────────
+        t0 = time.perf_counter()
+        res = self.prob.solve() # Resuelve
+        solve_ms = (time.perf_counter() - t0) * 1000.0
+        msg_time = Float32()
+        msg_time.data = float(solve_ms)
+        self.pub_solve_time.publish(msg_time)
 
         if res.info.status != 'solved':
             return
