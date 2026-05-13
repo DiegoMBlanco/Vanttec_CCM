@@ -4,10 +4,11 @@ Es la forma más básica. Asume que el robot se mueve a una velocidad fija prede
 
 Ecuación del modelo:
 
-$$\begin{bmatrix} \dot{e}_y \\ \dot{e}_\psi \end{bmatrix} = \begin{bmatrix} 0 & V_{cte} \\ 0 & 0 \end{bmatrix} \begin{bmatrix} e_y \\ e_\psi \end{bmatrix} + \begin{bmatrix} 0 \\ \frac{V_{cte}}{L} \end{bmatrix} \delta$$
+<img width="295" height="74" alt="image" src="https://github.com/user-attachments/assets/1bf89cf7-49cb-4e18-82b6-f78ec30aface" />
 
-Ventajas: Extremadamente rápido (microsegundos); muy fácil de implementar.
-Desventajas: Si el robot frena o acelera, el modelo deja de ser válido y el control se vuelve inestable o impreciso. No puede reaccionar a curvas cerradas reduciendo velocidad.
+
+* Ventajas: Extremadamente rápido (microsegundos); muy fácil de implementar.
+* Desventajas: Si el robot frena o acelera, el modelo deja de ser válido y el control se vuelve inestable o impreciso. No puede reaccionar a curvas cerradas reduciendo velocidad.
 
 # 2. LTV-MPC (Tu código actual)
 
@@ -19,9 +20,9 @@ $$x_{k+1} = A(v_k)x_k + B(v_k)u_k$$
 
 (Aquí $A$ y $B$ dependen de $v$, por eso las recalculas en get_model_matrices).
 
-Cómo maneja la velocidad: Como la velocidad es una entrada externa para el optimizador, necesitas una función externa (get_adaptive_v_target) que le diga qué velocidad seguir.
-Ventajas: Muy balanceado. Es robusto frente a cambios de velocidad y sigue siendo muy rápido (apto para procesadores modestos).
-Desventajas: El MPC es "ciego" a por qué debe frenar; simplemente obedece a la función externa. No optimiza el perfil de velocidad, solo lo sigue.
+* Cómo maneja la velocidad: Como la velocidad es una entrada externa para el optimizador, necesitas una función externa (get_adaptive_v_target) que le diga qué velocidad seguir.
+* Ventajas: Muy balanceado. Es robusto frente a cambios de velocidad y sigue siendo muy rápido (apto para procesadores modestos).
+* Desventajas: El MPC es "ciego" a por qué debe frenar; simplemente obedece a la función externa. No optimiza el perfil de velocidad, solo lo sigue.
 
 # NMPC (MPC No Lineal)
 
@@ -35,11 +36,11 @@ $$\dot{y} = v \cdot \sin(\theta)$$
 
 $$\dot{\theta} = \frac{v}{L} \tan(\delta)$$
 
-Cómo maneja la velocidad: La velocidad y el giro están "acoplados" en la misma ecuación. El NMPC entiende que si gira mucho el volante ($\delta$), la posición $(x, y)$ cambiará de forma no lineal.
+* Cómo maneja la velocidad: La velocidad y el giro están "acoplados" en la misma ecuación. El NMPC entiende que si gira mucho el volante ($\delta$), la posición $(x, y)$ cambiará de forma no lineal.
 
-Ventajas: Comportamiento humano/natural. Puede frenar antes de una curva porque "predice" que se saldrá de la trayectoria si no lo hace. Maximiza el rendimiento del vehículo.
+* Ventajas: Comportamiento humano/natural. Puede frenar antes de una curva porque "predice" que se saldrá de la trayectoria si no lo hace. Maximiza el rendimiento del vehículo.
 
-Desventajas: Computacionalmente muy costoso. Requiere solvers complejos (como CasADi o IPOPT). Puede sufrir de "no convexidad" (encontrar una solución que no es la mejor).
+* Desventajas: Computacionalmente muy costoso. Requiere solvers complejos (como CasADi o IPOPT). Puede sufrir de "no convexidad" (encontrar una solución que no es la mejor).
 
 
 <img width="717" height="339" alt="image" src="https://github.com/user-attachments/assets/1a42f070-0bbe-427c-be44-a277450063da" />
