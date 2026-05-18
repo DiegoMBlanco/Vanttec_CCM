@@ -68,7 +68,33 @@ for mask_poly, cls in zip(masks, clss):
     cv2.fillPoly(slam_mask, points, 255)
 ```
 
-Posteriormente, se calcula el centroide del objeto utilizando lso momentos aplicados en esa caja:
+Posteriormente, se calcula el centroide del objeto utilizando los momentos aplicados en esa caja.
+
+Los momentos de una imagen son promedios ponderados de las intenisdades de los pixeles. Para una imagen binarizada (píxeles 0 y 1), el momento de orden $(i, j)$ se define como:
+
+$$M_{ij} = \sum_{x,y} x^i y^j I(x,y)$$
+
+Esta fórmula es la base de la Estadística Espacial en imágenes ya que describe la distribución de los píxeles blancos en un plano cartesiano. Sus componentes son:
+* $\sum_{x,y}$: Significa que vamos a recorrer cada píxel de la imagen (o del ROI), fila por fila y columna por columna.
+* $x^i y^j$: Son las coordenadas del píxel elevadas a una potencia. Estas potencias ($i$ y $j$) determinan qué característica estamos calculando (el "orden" del momento).
+* $I(x,y)$: Es la Intensidad del píxel en esa posición.
+
+¿Qué significan los órdenes del momento?
+
+1) Si ponemos $i=0$ y $j=0$, obtenemos el área:
+
+$$M_{00} = \sum_{x,y} x^0 y^0 I(x,y) = \sum_{x,y} 1 \cdot 1 \cdot I(x,y)$$
+
+2) Si ponemos $i=01$ y $j=0$ o viceversa (momentos de primer orden), obtenemos la posición en cada coordenada:
+
+* $M_{10}$ ($i=1, j=0$): Suma las coordenadas $x$ de todos los píxeles blancos ($\sum x \cdot I(x,y)$).
+* $M_{01}$ ($i=0, j=1$): Suma las coordenadas $y$ de todos los píxeles blancos ($\sum y \cdot I(x,y)$).
+
+A partir de aquí se puede calcular el centroide (centro de masa) con los momentos de grado 0 y 1 con las siguiente fórmulas:
+
+$$\bar{x} = \frac{M_{10}}{M_{00}} \quad , \quad \bar{y} = \frac{M_{01}}{M_{00}}$$
+
+Cada una describe la posición del centroide en su eje respectivo. 
 
 ```python
 M = cv2.moments(points)
@@ -78,4 +104,14 @@ if M['m00'] != 0:
     cv2.circle(frame, (cx, cy), 12, (0, 255, 255), 2) 
     cv2.circle(frame, (cx, cy), 6, (255, 255, 255), -1) 
 ```
+
+El siguiente paso es dilatar los bordes de la silueta con un filtro morfológico para no dejar pasar detalles en la figura.
+
+
+```python
+kernel = np.ones((10, 10), np.uint8)
+slam_mask = cv2.dilate(slam_mask, kernel, iterations=1)
+```
+
+
 
