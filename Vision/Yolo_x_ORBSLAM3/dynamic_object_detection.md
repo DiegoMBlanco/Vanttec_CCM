@@ -105,13 +105,40 @@ if M['m00'] != 0:
     cv2.circle(frame, (cx, cy), 6, (255, 255, 255), -1) 
 ```
 
-El siguiente paso es dilatar los bordes de la silueta con un filtro morfológico para no dejar pasar detalles en la figura.
-
+El siguiente paso es dilatar los bordes de la silueta con un filtro morfológico para no dejar pasar detalles en la figura. Primero se crea un kernel. Luego, se aplica una función de dilatación"cv.dilate()" el cual, si todos los píxeles que están dentro del kernel son negros, el píxel central se queda negro. Si alguno es blanco, el centro se vuelve blanco. 
 
 ```python
 kernel = np.ones((10, 10), np.uint8)
 slam_mask = cv2.dilate(slam_mask, kernel, iterations=1)
 ```
 
+Finalmente invertimos la máscara binaria para que la silueta se transforme de color negro y aplicamos una máscara AND con el frame original para eliminar las siluetas dinámicas de nuestra imagen:
+
+```python
+# Invertimos máscara y aplicamos AND
+inv_mask = cv2.bitwise_not(slam_mask)
+frame_for_slam = cv2.bitwise_and(frame, frame, mask=inv_mask)
+```
+
+Resultados:
+
+
+
+https://github.com/user-attachments/assets/1bbe714b-a1de-4f20-970a-1de2a7f181f0
+
+
+
+
+https://github.com/user-attachments/assets/9da13b20-060b-41e7-b9fb-bc12ba1b3130
+
+
+
+
+https://github.com/user-attachments/assets/9915baa4-7e49-4fcf-a495-21e3a9cb1291
+
+
+
+
+https://github.com/user-attachments/assets/419a0dd6-cc76-4b10-91c1-2612e7e2def2
 
 
