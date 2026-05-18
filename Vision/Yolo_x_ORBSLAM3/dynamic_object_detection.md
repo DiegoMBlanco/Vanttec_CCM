@@ -124,14 +124,12 @@ Resultados:
 
 
 
-https://github.com/user-attachments/assets/1bbe714b-a1de-4f20-970a-1de2a7f181f0
+https://github.com/user-attachments/assets/bb815a1a-37c8-4782-9954-731527cdf86e
 
 
 
 
-https://github.com/user-attachments/assets/9da13b20-060b-41e7-b9fb-bc12ba1b3130
-
-
+https://github.com/user-attachments/assets/3f420a29-5108-4739-86eb-537afd04fa18
 
 
 
@@ -141,8 +139,8 @@ https://github.com/user-attachments/assets/3d94c6c6-360d-4c5a-a1ff-42792c134cf0
 
 
 
+https://github.com/user-attachments/assets/2a45bc3c-b91e-4c94-abcf-9b10c8c420f5
 
 
-https://github.com/user-attachments/assets/419a0dd6-cc76-4b10-91c1-2612e7e2def2
 
 
