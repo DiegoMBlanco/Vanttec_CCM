@@ -28,7 +28,7 @@ Por último, tomando en cuenta que las entradas son:
 
 Obtenemos que:
 
-$$\Beta = \arctan(\tan(u_2) \cdot \frac{Lr}{Lf + Lr})$$
+$$\beta = \arctan(\tan(u_2) \cdot \frac{Lr}{Lf + Lr})$$
 
 
 # MPC Lineal
