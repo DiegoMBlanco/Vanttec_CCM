@@ -79,7 +79,7 @@ Dada una trayectoria de referencia ($x_{ref}, y_{ref}, \Psi_{ref}$), definimos d
 
 $$\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$$
 
-2) $e_\Psi$ (Error de orientación) $ = \Psi - \Psi_{ref}$. La taza de cambio del ángulo del error (derivada) corresponde con la del modelo cinemático:
+2) $e_\Psi$ (Error de orientación) $= \Psi - \Psi_{ref}$. La taza de cambio del ángulo del error (derivada) corresponde con la del modelo cinemático:
 
 $$\dot{e}_ \Psi = \dot{\Psi} - \dot{\Psi}_{ref} = \frac{v}{L_r}\sin(\beta)$$
 
