@@ -71,10 +71,37 @@ $$F_{yr} = - C_{\alpha r} \alpha_r \cdot \alpha_{r} = - C_{\alpha r}(\frac{V_y +
 En donde $\delta f$ es el heading hacia donde apunta la rueda delantera y $\frac{V_y + L_f \dot{\Psi}}{V_x}$ es hacia donde se mueve realmente considerando el slip angle.
 
 
+# Errores
+
+Dada una trayectoria de referencia ($x_{ref}, y_{ref}, \Psi_{ref}$), definimos dos tipos de errores:
+
+1) $e_y$ (Error lateral): Distancia ortogonal a la ruta. Su cambio es la velocidad proyectada en el eje perpendicular:
+
+$$\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$$
+
+2) $e_\Psi$ (Error de orientación) $ = \Psi - \Psi_{ref}$
+
+¿Por qué así? Imagina que que vas en carro por la carretera y quieres seguir la línea del centro del camino. La proyección sobrel el eje global Y (velocidad en Y) mide la velocidad en la que un objeto se mueve hacia el norte sobre la carretera. En nuestro marco de referencia, el eje X punta hacia el norte. La velocidad $e_y$ que define la velocidad lateral depende del ángulo relativo que tenemos con la línea de referencia $e_\Psi$. Si el ángulo es 0°, significa que nuestro vector de velocidad apunta completamente hacia el eje X y la velocidad lateral sería 0 porque $\sin(0°) = 0$.
+
+<img width="928" height="1134" alt="Gemini_Generated_Image_v85llkv85llkv85l" src="https://github.com/user-attachments/assets/6e2e0b90-2be7-4c52-af4a-08959f3e863c" />
+
+
+Estos errores se utilizan para describir el modelo cinemático del Ackermann en términos del error; lo que nos permite aplicar aproximaciones de Taylor en ecuaciones cuyos estados no dependen de la pose del robot. Por ejemplo, si tomáramos la pose $X, Y, \Psi$ como entradas, tendríamos que estar recalculando las trayectorias desde el punto 0,0 hasta la distancia en que se encuentran y eso es costoso computacionalmente hablando. Eso solo lo va a hacer el NMPC.
+
+
 
 # MPC Lineal
 
-Es la forma más básica del MPC. Asume que el robot se mueve a una velocidad fija predefinida y que nunca va a cambiar. Aquí el modelo matemático es una línea recta:
+Es la forma más básica del MPC. Asume que el robot se mueve a una velocidad fija predefinida y que nunca va a cambiar. Aquí el modelo matemático es una línea recta.
+
+### Definición del sistema
+* Vector de estados:
+
+$$x_{lin} = \begin{bmatrix} e_y \\ e_\Psi \end{bmatrix}$$
+
+* Vector de entradas:
+
+$$u_{lin} = \begin{bmatrix} u_2 \end{bmatrix} = \begin{bmatrix} \delta_f \end{bmatrix}$$
 
 $$\begin{bmatrix} \dot{e}_y \\ \dot{e}_\psi \end{bmatrix} = \begin{bmatrix} 0 & V_{cte} \\ 0 & 0 \end{bmatrix} \begin{bmatrix} e_y \\ e_\psi \end{bmatrix} + \begin{bmatrix} 0 \\ \frac{V_{cte}}{L} \end{bmatrix} \delta$$
 
