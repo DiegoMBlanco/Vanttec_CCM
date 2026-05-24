@@ -31,6 +31,47 @@ Obtenemos que:
 $$\beta = \arctan(\tan(u_2) \cdot \frac{Lr}{Lf + Lr})$$
 
 
+# Modelo dinámico de la Bicicleta (Ackermann)
+
+El modelo cinemático solo usa geometría, no considera fuerzas, supone no deslizamiento, y funciona bien a baja velocidad. EL modelo dinámico usa leyes de Newton para considerar fuerzas laterales de las llantas, modela el desplazamiento, y sirve para velocidades altas y maniobras agresivas:
+
+<img width="3481" height="1453" alt="IMG_20260524_055530_edit_81371252409844" src="https://github.com/user-attachments/assets/e81d9522-1105-4def-b89d-3f26b72d96d2" />
+
+El modelo dinámico tiene tres grados de libertad principales:
+1) $V_x$ Velocidad longitudinal
+2) $V_y$ Velocidad lateral
+3) $\dot{\Psi}$ Velocidad de yaw
+
+Sus ecuaciones son:
+
+1) Dinámica longitudinal:
+
+$$m(\dot{V_x}-\dot(\Psi)V_y) = F_{xf} + F_{xr}$$
+
+Aquí se aplica la Segunda Ley de Newton $F = ma$ que describe la aceleración longitudinal del sistema de referencia del vehículo. El término $-\dot(\Psi)V_y)$ aparece en la ecuación porque estamos en un sistema no inercial (girando con el vehículo) y se considera el efecto coriolis. $F_{xf}$ y $F_{xr}$ son las fuerzas longitudinales de las ruedas frontal y trasera.
+
+2) Dinámica lateral:
+
+$$m(\dot{V_y}-\dot(\Psi)V_x) = F_{yf} + F_{yr}$$
+
+3) Dinámica rotacional:
+
+$$I_z \ddot(\Psi)V_x) = L_f \cdot F_{yf} - L_r \cdot F_{yr}$$
+
+El momento alrededor del eje Z es causado por las fuerzas laterales: momentos de las ruedas frontal y trasera. Las fuerzas de las llantas se calculan con las ecuaciones de dinámica de llantas:
+
+$$F_{xf} = C_{\tau f} \cdot \tau_{xf} \qquad F_{xr} = C_{\tau r} \cdot \tau_{xr}$$
+
+En donde $C_{\tau f}$ es la rigidez longitudinal de la llanta y $\tau_x$ es el deslizamiento longitudinal. Para el caso de Y:
+
+$$F_{yf} = C_{\alpha f} \cdot \alpha_{f} = C_{\alpha f}(\delta_f - frac{V_y + L_f \dot{\Psi}}{V_x}) $$
+
+$$F_{yr} = - C_{\alpha r} \alpha_r \cdot \alpha_{r} = - C_{\alpha r}(frac{V_y + L_r \dot{\Psi}}{V_x}) $$
+
+En donde $\delta f$ es el heading hacia donde apunta la rueda delantera y $frac{V_y + L_f \dot{\Psi}}{V_x})$ es hacia donde se mueve realmente considerando el slip angle.
+
+
+
 # MPC Lineal
 
 Es la forma más básica del MPC. Asume que el robot se mueve a una velocidad fija predefinida y que nunca va a cambiar. Aquí el modelo matemático es una línea recta:
@@ -54,7 +95,7 @@ El modelo busca seguir una velocidad de referencia que es una entrada externa pa
 
 # NMPC
 
-El optimizador usa ecuaciones trigonométricas (no lineales) considerando a la velocidad como una variable directa. Vamos a tomar solamente el modelo cinemático para la primera versión del NMPC. Para un vehículo de altas velocidades sí es recomendable tomar el modelo dinámico que toma en cosnideración el ángulod e deslizamiento y la fricción. 
+El optimizador usa ecuaciones trigonométricas (no lineales) considerando a la velocidad como una variable directa. Vamos a tomar solamente el modelo cinemático para la primera versión del NMPC. Para un vehículo de altas velocidades sí es recomendable tomar el modelo dinámico que toma en consideración el ángulo de deslizamiento y la fricción. 
 
 $$\dot{x} = v \cdot \cos(\Psi + \beta)$$
 
