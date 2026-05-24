@@ -54,13 +54,15 @@ El modelo busca seguir una velocidad de referencia que es una entrada externa pa
 
 # NMPC
 
-El optimizador usa ecuaciones trigonométricas (no lineales) considerando a la velocidad como una variable directa:
+El optimizador usa ecuaciones trigonométricas (no lineales) considerando a la velocidad como una variable directa. Vamos a tomar solamente el modelo cinemático para la primera versión del NMPC. Para un vehículo de altas velocidades sí es recomendable tomar el modelo dinámico que toma en cosnideración el ángulod e deslizamiento y la fricción. 
 
-$$\dot{x} = v \cdot \cos(\theta)$$
+$$\dot{x} = v \cdot \cos(\Psi + \beta)$$
 
-$$\dot{y} = v \cdot \sin(\theta)$$
 
-$$\dot{\theta} = \frac{v}{L} \tan(\delta)$$
+$$\dot{y} = v \cdot \sin(\Psi + \beta)$$
+
+
+$$\dot{v} = u_1$$
 
 La velocidad y el giro están directamente acoplados en el sistema dinámico. La posición cambiará de forma no lineal, y trata de tomar la mejor ruta que tome en consideración las restricciones dinámicas completas del sistema.
 
