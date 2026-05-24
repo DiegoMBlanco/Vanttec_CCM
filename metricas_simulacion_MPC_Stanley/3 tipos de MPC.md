@@ -75,7 +75,7 @@ En donde $\delta f$ es el heading hacia donde apunta la rueda delantera y $\frac
 
 Dada una trayectoria de referencia ($x_{ref}, y_{ref}, \Psi_{ref}$), definimos dos tipos de errores:
 
-1) $e_y$ (Error lateral): Distancia ortogonal a la ruta. Su cambio es la velocidad proyectada en el eje perpendicular:
+1) $e_y$ (Error lateral): Distancia ortogonal a la ruta. Su cambio es la velocidad proyectada en el eje perpendicular. SImplemente reemplazamos los valores del modelo cinemático de la bicicleta:
 
 $$\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$$
 
@@ -92,7 +92,7 @@ Estos errores se utilizan para describir el modelo cinemático del Ackermann en 
 
 # MPC Lineal
 
-Es la forma más básica del MPC. Asume que el robot se mueve a una velocidad fija predefinida y que nunca va a cambiar. Aquí el modelo matemático es una línea recta.
+Es la forma más básica del MPC. Asume que el robot se mueve a una velocidad fija predefinida y que nunca va a cambiar. Aquí el modelo matemático es una línea recta que depende de los estados de error.
 
 ### Definición del sistema
 * Vector de estados:
