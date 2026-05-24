@@ -4,23 +4,23 @@ El modelo de la bicicleta tiene 3 grados de libertad $(x, y, \theta)$ y restricc
 
 <img width="3987" height="1335" alt="IMG_20260524_052500" src="https://github.com/user-attachments/assets/1a5c92b5-457d-4636-ac3d-da76df9d27d7" />
 
-Los estados son $X, Y, V$. La Velocidad es referente al centro de gravedad. $\Psi$ es el ángulo entre el eje longitudinal del carro y el eje global $\vec{X}$. $\beta$ es el ángulo entre el eje longitudinal del carro y el vector de velocidad. Aparece porque las ruedas giran un ángulo $\delta_f$, pero como el centro de rotación instantáneo no está en $G$, la velocidad en $G$ no apunta exactamente en dirección $\Psi$. Por ello, la dirección real de la velocidad es $\Psi + \Beta$. En las ecuaciones se asume que no existe deslizamiento:
+Los estados son $X, Y, V$. La Velocidad es referente al centro de gravedad. $\Psi$ es el ángulo entre el eje longitudinal del carro y el eje global $\vec{X}$. $\beta$ es el ángulo entre el eje longitudinal del carro y el vector de velocidad. Aparece porque las ruedas giran un ángulo $\delta_f$, pero como el centro de rotación instantáneo no está en $G$, la velocidad en $G$ no apunta exactamente en dirección $\Psi$. Por ello, la dirección real de la velocidad es $\Psi + \beta$. En las ecuaciones se asume que no existe deslizamiento:
 
 1) Proyección sobre el eje global X:
 
-$$\dot{x} = v \cdot \cos(\Psi + \Beta)$$
+$$\dot{x} = v \cdot \cos(\Psi + \beta)$$
 
-2) Proyeccion sobre el eje global Y:
+2) Proyección sobre el eje global Y:
 
-$$\dot{y} = v \cdot \sin(\Psi + \Beta)$$
+$$\dot{y} = v \cdot \sin(\Psi + \beta)$$
 
 3) La aceleración longitudinal controla la velocidad:
 
 $$\dot{v} = u_1$$
 
-La velocidad angular depende de qué tan rápido vaya el carro, de qué tan grande sea $\Beta$, y la distancia al eje trasero:
+La velocidad angular depende de qué tan rápido vaya el carro, de qué tan grande sea $\beta$, y la distancia al eje trasero:
 
-$$\dot{\Psi} = \frac{v}{Lr} \sin(\Beta)$$
+$$\dot{\Psi} = \frac{v}{Lr} \sin(\beta)$$
 
 Por último, tomando en cuenta que las entradas son:
 * $u_1 = aceleración$
