@@ -68,7 +68,7 @@ $$F_{yf} = C_{\alpha f} \cdot \alpha_{f} = C_{\alpha f}(\delta_f - \frac{V_y + L
 
 $$F_{yr} = - C_{\alpha r} \alpha_r \cdot \alpha_{r} = - C_{\alpha r}(\frac{V_y + L_r \dot{\Psi}}{V_x}) $$
 
-En donde $\delta f$ es el heading hacia donde apunta la rueda delantera y $\frac{V_y + L_f \dot{\Psi}}{V_x})$ es hacia donde se mueve realmente considerando el slip angle.
+En donde $\delta f$ es el heading hacia donde apunta la rueda delantera y $\frac{V_y + L_f \dot{\Psi}}{V_x}$ es hacia donde se mueve realmente considerando el slip angle.
 
 
 
