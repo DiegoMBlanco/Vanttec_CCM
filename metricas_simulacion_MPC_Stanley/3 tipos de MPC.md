@@ -79,7 +79,9 @@ Dada una trayectoria de referencia ($x_{ref}, y_{ref}, \Psi_{ref}$), definimos d
 
 $$\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$$
 
-2) $e_\Psi$ (Error de orientación) $ = \Psi - \Psi_{ref}$
+2) $e_\Psi$ (Error de orientación) $ = \Psi - \Psi_{ref}$. La taza de cambio del ángulo del error (derivada) corresponde con la del modelo cinemático:
+
+$$\dot{e}_ \Psi = \dot{\Psi} - \dot{\Psi}_{ref} = \frac{v}{L_r}\sin(\beta)$$
 
 ¿Por qué así? Imagina que que vas en carro por la carretera y quieres seguir la línea del centro del camino. La proyección sobrel el eje global Y (velocidad en Y) mide la velocidad en la que un objeto se mueve hacia el norte sobre la carretera. En nuestro marco de referencia, el eje X punta hacia el norte. La velocidad $e_y$ que define la velocidad lateral depende del ángulo relativo que tenemos con la línea de referencia $e_\Psi$. Si el ángulo es 0°, significa que nuestro vector de velocidad apunta completamente hacia el eje X y la velocidad lateral sería 0 porque $\sin(0°) = 0$.
 
@@ -97,11 +99,13 @@ Es la forma más básica del MPC. Asume que el robot se mueve a una velocidad fi
 ### Definición del sistema
 * Vector de estados:
 
-$$x_{lin} = \begin{bmatrix} e_y \\ e_\Psi \end{bmatrix}$$
+$$x = \begin{bmatrix} e_y \\ e_\Psi \end{bmatrix}$$
 
 * Vector de entradas:
 
-$$u_{lin} = \begin{bmatrix} u_2 \end{bmatrix} = \begin{bmatrix} \delta_f \end{bmatrix}$$
+$$u = \begin{bmatrix} u_2 \end{bmatrix} = \begin{bmatrix} \delta_f \end{bmatrix}$$
+
+Debido a que la velocidad no es variable cambiante, la aceleración no tiene efecto sobre la velocidad. 
 
 $$\begin{bmatrix} \dot{e}_y \\ \dot{e}_\psi \end{bmatrix} = \begin{bmatrix} 0 & V_{cte} \\ 0 & 0 \end{bmatrix} \begin{bmatrix} e_y \\ e_\psi \end{bmatrix} + \begin{bmatrix} 0 \\ \frac{V_{cte}}{L} \end{bmatrix} \delta$$
 
