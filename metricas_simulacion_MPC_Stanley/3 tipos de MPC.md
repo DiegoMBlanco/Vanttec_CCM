@@ -91,6 +91,47 @@ $$\dot{e}_ \Psi = \dot{\Psi} - \dot{\Psi}_{ref} = \frac{v}{L_r}\sin(\beta)$$
 Estos errores se utilizan para describir el modelo cinemático del Ackermann en términos del error; lo que nos permite aplicar aproximaciones de Taylor en ecuaciones cuyos estados no dependen de la pose del robot. Por ejemplo, si tomáramos la pose $X, Y, \Psi$ como entradas, tendríamos que estar recalculando las trayectorias desde el punto 0,0 hasta la distancia en que se encuentran y eso es costoso computacionalmente hablando. Eso solo lo va a hacer el NMPC.
 
 
+# Series exponenciales
+
+Vamos a representar la función $f(x) = \frac{1}{1-X}$ cómo una suma de términos. A esto se le conoce como serie geométrica. Imagina que divides literalmente esa ecuación con el método de la casita:
+
+<img width="4000" height="3000" alt="IMG_20260525_004559" src="https://github.com/user-attachments/assets/83e5dc6d-05d7-49b3-90f1-4d20fee276cc" />
+
+Mientras más términos tomes, mejor será la aproximación. Solo funciona con números pequeños dentro del valor de convergencia. La serie geométrica tiene la siguiente forma:
+
+$$\frac{1}{1-x} = \sum_{n=0}^{\infty} X^{n}$$
+
+## Serie de Taylor
+
+Sea una función de la forma:
+
+$$f(x) = \sum_{n=0}^{\infty} a_n(X-a)^n$$
+
+Es decir, que se puede reescribir de la siguiente manera:
+
+$$f(x) = a_0 + a_1(X-a) + a_2(X-a)² + \cdot \cdot \cdot + a_n[X-a)^n$$
+
+Vamos a aplicar derivadas con reglas de la cadena:
+
+$$f'(x) = a_1 + 2 \cdot a_2(X-a)(1) + 3 \dot a_3(X-a)²(1) + 4 \dot a_4(X-a)³ + \cdot \cdot \cdot$$
+
+$$f''(x) = a_2 + (2 \dot 3) \cdot a_3(X-a)(1) + (3 \dot 4) \dot a_4(X-a)²(1) + \cdot \cdot \cdot$$
+
+$$f''(x) = (2 \dot 3) \cdot a_3 + (2 \dot 3 \dot 4) \dot a_4(X-a)(1) + \cdot \cdot \cdot$$
+
+Generalizamos el patrón:
+
+$$f^{n}(X) = n!a_n + \cdot \cdot \cdot
+
+Si $X = a$, entonces:
+
+$$f'(a) = a_1 \qquad a_2 = \frac{f''(a)}{2!} \qquad a_3 = \frac{f'''(a)}{3!} \qquad a_n = \frac{f^{n}(a)}{n!}$$
+
+Por lo tanto, la Serie de Taylor se ve así:
+
+
+
+
 
 # MPC Lineal
 
