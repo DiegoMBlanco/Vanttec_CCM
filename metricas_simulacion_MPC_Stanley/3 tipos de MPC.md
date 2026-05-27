@@ -246,6 +246,41 @@ $$
 \end{bmatrix}
 &=
 \begin{bmatrix}
+? & ? \\
+? & ?
+\end{bmatrix}
+\begin{bmatrix}
+e_y \\
+e_\Psi
+\end{bmatrix}
++
+\begin{bmatrix}
+? \\
+?
+\end{bmatrix}
+\begin{bmatrix}
+u_2
+\end{bmatrix}
+\end{aligned}
+$$
+
+
+
+
+Las ecuaciones a analizar son:
+1) $\dot{e}_y = 0 \cdot e_y + V_{fixed} \cdot e_\Psi + V_{fixed} \frac{L_r}{L} \cdot u_2$
+2) $\dot{e}_\Psi = 0 \cdot e_y + 0 \cdot e_\Psi + \frac{V_{fixed}}{L} \cdot u_2$
+
+Las matrices que cumplen esta ley son:
+
+$$
+\begin{aligned}
+\begin{bmatrix}
+\dot{e}_y \\
+\dot{e}_\Psi
+\end{bmatrix}
+&=
+\begin{bmatrix}
 0 & V_{fixed} \\
 0 & 0
 \end{bmatrix}
@@ -263,17 +298,6 @@ u_2
 \end{bmatrix}
 \end{aligned}
 $$
-
-
-
-
-Las ecuaciones a analizar son:
-1) $\dot{e}_y = 0 \cdot e_y + V_{fixed} \cdot e_\Psi + V_{fixed} \frac{L_r}{L} \cdot u_2$
-2) $\dot{e}_\Psi = 0 \cdot e_y + 0 \cdot e_\Psi + \frac{V_{fixed}}{L} \cdot u_2$
-
-Las matrices que cumplen esta ley son:
-
-$$\begin{bmatrix} \dot{e}_y \\ \dot{e}_\Psi \end{bmatrix} = \underbrace{\begin{bmatrix} 0 & V_{fixed} \\ 0 & 0 \end{bmatrix}}_{A_c} \begin{bmatrix} e_y \\ e_\Psi \end{bmatrix} + \underbrace{\begin{bmatrix} V_{fixed} \frac{L_r}{L_r + L_f} \\ \frac{V_{fixed}}{L_r + L_f} \end{bmatrix}}_{B_c} \begin{bmatrix} u_2 \end{bmatrix}$$
 
 * Ventajas: Muy rápido y fácil de implementar
 * Desventajas: El modelo deja de ser válido si la velocidad cambia. Además no puede reaccionar a curvas para reducir velocidad
