@@ -115,7 +115,7 @@ Vamos a aplicar derivadas con reglas de la cadena:
 
 $$f'(x) = a_1 + 2 \cdot a_2(X-a)(1) + 3 \cdot a_3(X-a)²(1) + 4 \cdot a_4(X-a)³ + \cdot \cdot \cdot$$
 
-$$f''(x) = a_2 + (2 \cdot 3) \cdot a_3(X-a)(1) + (3 \dot 4) \cdot a_4(X-a)²(1) + \cdot \cdot \cdot$$
+$$f''(x) = a_2 + (2 \cdot 3) \cdot a_3(X-a)(1) + (3 \cdot 4) \cdot a_4(X-a)²(1) + \cdot \cdot \cdot$$
 
 $$f''(x) = (2 \cdot 3) \cdot a_3 + (2 \cdot 3 \cdot 4) \cdot a_4(X-a)(1) + \cdot \cdot \cdot$$
 
