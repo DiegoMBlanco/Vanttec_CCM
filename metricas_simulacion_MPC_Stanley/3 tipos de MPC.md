@@ -238,7 +238,31 @@ $$\dot{x} = A_c x + B_c u$$
 
 EN nuestro caso, buscar qué valores deben de ir en las matrices A y B para que nos den la ecuaciones linearizadas que acabamos de calcular:
 
-$$\begin{bmatrix} 0 & V_{fixed} \\ 0 & 0 \end{bmatrix} \begin{bmatrix} e_y \\ e_\Psi \end{bmatrix}$$
+$$
+\begin{aligned}
+\begin{bmatrix}
+\dot{e}_y \\
+\dot{e}_\Psi
+\end{bmatrix}
+&=
+\begin{bmatrix}
+0 & V_{fixed} \\
+0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+e_y \\
+e_\Psi
+\end{bmatrix}
++
+\begin{bmatrix}
+V_{fixed} \frac{L_r}{L} \\
+\frac{V_{fixed}}{L}
+\end{bmatrix}
+\begin{bmatrix}
+u_2
+\end{bmatrix}
+\end{aligned}
+$$
 
 
 
