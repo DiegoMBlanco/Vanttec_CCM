@@ -278,6 +278,7 @@ $$
 
 
 Las ecuaciones a analizar son:
+
 1)
 
 $$\dot{e}_y = 0 \cdot e_y + V_{fixed} \cdot e_\Psi + V_{fixed} \frac{L_r}{L} \cdot u_2$$
