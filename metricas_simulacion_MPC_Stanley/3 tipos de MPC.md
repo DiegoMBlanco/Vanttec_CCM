@@ -238,7 +238,33 @@ $$\dot{x} = A_c x + B_c u$$
 
 EN nuestro caso, buscar qué valores deben de ir en las matrices A y B para que nos den la ecuaciones linearizadas que acabamos de calcular:
 
-$$\begin{bmatrix} \dot{e}_y \\ \dot{e}_\Psi \end{bmatrix} = \underbrace{\begin{bmatrix} ? & ? \\ ? & ? \end{bmatrix}}_{A_c} \begin{bmatrix} e_y \\ e_\Psi \end{bmatrix} + \underbrace{\begin{bmatrix} ? \\ ? \end{bmatrix}}_{B_c} \begin{bmatrix} u_2 \end{bmatrix}$$
+$$
+\begin{bmatrix}
+\dot{e}_y \\
+\dot{e}_\Psi
+\end{bmatrix}
+=
+\underbrace{
+\begin{bmatrix}
+? & ? \\
+? & ?
+\end{bmatrix}
+}_{A_c}
+\begin{bmatrix}
+e_y \\
+e_\Psi
+\end{bmatrix}
++
+\underbrace{
+\begin{bmatrix}
+? \\
+?
+\end{bmatrix}
+}_{B_c}
+\begin{bmatrix}
+u_2
+\end{bmatrix}
+$$
 
 Las ecuaciones a analizar son:
 1) $\dot{e}_y = 0 \cdot e_y + V_{fixed} \cdot e_\Psi + V_{fixed} \frac{L_r}{L} \cdot u_2$
