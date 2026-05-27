@@ -218,7 +218,7 @@ Debido a que la velocidad no es variable cambiante, la aceleración no tiene efe
 
 1) $\beta = \arctan\left(\tan(u_2) \cdot \frac{L_r}{L_r + L_f}\right)$
 2) $\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$
-3) $\dot{e}_y = v \cdot \sin(e_{\Psi} + \beta)$
+3) $\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$
 
 Estas ecuaciones son no lineales ya que poseen funciones trigonométricas. Vamos a linearizar aplicando la Serie de Maclaurin a cada función (seno, tangente, y arcotangente) y vamos a tomar solamente la primera derivada que representa nuestro término lineal. Los demás términos ya contienen un exponente mayor a 1:
 
@@ -236,7 +236,7 @@ El siguiente paso es armar la ecuación cinemática linearizada que describa nue
 
 $$\dot{x} = A_c x + B_c u$$
 
-EN nuestro caso, buscar qué valores deben de ir en las matrices A y B para que nos den la ecuaciones linearizadas que acabamos de calcular:
+En nuestro caso, buscar qué valores deben de ir en las matrices A y B para que nos den la ecuaciones linearizadas que acabamos de calcular:
 
 $$
 \begin{aligned}
@@ -290,8 +290,8 @@ e_\Psi
 \end{bmatrix}
 +
 \begin{bmatrix}
-V_{fixed} \frac{L_r}{L} \\
-\frac{V_{fixed}}{L}
+V_{fixed} \frac{L_r}{L_r + L_f} \\
+\frac{V_{fixed}}{L_r + L_f}
 \end{bmatrix}
 \begin{bmatrix}
 u_2
