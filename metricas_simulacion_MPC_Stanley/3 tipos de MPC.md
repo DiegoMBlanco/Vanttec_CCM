@@ -200,6 +200,7 @@ Su forma queda:
 
 $$\arctan(x) = 0 + 1x + \frac{0}{2!}x^2 + \frac{-2}{3!}x^3 + \frac{0}{4!}x^4 + \frac{24}{5!}x^5 + ...$$
 
+
 # MPC Lineal
 
 Es la forma más básica del MPC. Asume que el robot se mueve a una velocidad fija predefinida y que nunca va a cambiar. Aquí el modelo matemático es una línea recta que depende de los estados de error.
@@ -217,19 +218,19 @@ Debido a que la velocidad no es variable cambiante, la aceleración no tiene efe
 
 1) $\beta = \arctan\left(\tan(u_2) \cdot \frac{L_r}{L_r + L_f}\right)$
 2) $\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$
-3) $\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$
+3) $\dot{e}_y = v \cdot \sin(e_{\Psi} + \beta)$
 
 Estas ecuaciones son no lineales ya que poseen funciones trigonométricas. Vamos a linearizar aplicando la Serie de Maclaurin a cada función (seno, tangente, y arcotangente) y vamos a tomar solamente la primera derivada que representa nuestro término lineal. Los demás términos ya contienen un exponente mayor a 1:
 
-1) $$\sin(\alpha) \approx 0 + 1 \cdot (\alpha - 0) = \alpha$$
-2) $$\tan(\alpha) \approx 0 + 1 \cdot (\alpha - 0) = \alpha$$
-3) $$\arctan(\alpha) \approx 0 + 1 \cdot (\alpha - 0) = \alpha$$
+1) $\sin(\alpha) \approx 0 + 1 \cdot (\alpha - 0) = \alpha$
+2) $\tan(\alpha) \approx 0 + 1 \cdot (\alpha - 0) = \alpha$
+3) $\arctan(\alpha) \approx 0 + 1 \cdot (\alpha - 0) = \alpha$
 
 Por lo tanto, las ecuaciones linealizadas son:
 
-1) $$\beta \approx u_2 \cdot \frac{L_r}{L_r + L_f}$$
-2) $$\dot{e}_\Psi \approx \frac{V_{fixed}}{L_r + L_f} u_2$$
-3) $$\dot{e}_y \approx V_{fixed} e_\Psi + V_{fixed} \frac{L_r}{L_r + L_f} u_2$$
+1) $\beta \approx u_2 \cdot \frac{L_r}{L_r + L_f}$
+2) $\dot{e}_\Psi \approx \frac{V_{fixed}}{L_r + L_f} u_2$
+3) $\dot{e}_y \approx V_{fixed} e_\Psi + V_{fixed} \frac{L_r}{L_r + L_f} u_2$
 
 El siguiente paso es armar la ecuación cinemática linearizada que describa nuestro sistema de error con la forma:
 
