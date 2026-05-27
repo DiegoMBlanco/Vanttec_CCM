@@ -146,10 +146,10 @@ $$f(x) = f(0) + f'(0)(x-0) + \frac{f''(0)}{2!}(x-0)² + ... + \frac{f^{n}(0)}{n!
 
 * Euler:
 
-$$f(x) = e^x \qqquad f(0) = 1$$
-$$f'(x) = e^x \qqquad f'(0) = 1$$
-$$f''(x) = e^x \qqquad f''(0) = 1$$
-$$f^n(x) = e^x \qqquad f^n(0) = 1$$
+$$f(x) = e^x \qquad f(0) = 1$$
+$$f'(x) = e^x \qquad f'(0) = 1$$
+$$f''(x) = e^x \qquad f''(0) = 1$$
+$$f^n(x) = e^x \qquad f^n(0) = 1$$
 
 Su forma queda:
 
@@ -157,10 +157,10 @@ $$e^x = 1 + x + \frac{x²}{2!} + \frac{x³}{3!} + ... + \frac{x^n}{n!}
 
 * Seno:
 
-$$f(x) = sen(x) \qqquad f(0) = 0$$
-$$f'(x) = cos(x) \qqquad f'(0) = 1$$
-$$f''(x) = -sen(x) \qqquad f''(0) = 0$$
-$$f'''(x) = -cos(x) \qqquad f'''(0) = -1$$
+$$f(x) = sen(x) \qquad f(0) = 0$$
+$$f'(x) = cos(x) \qquad f'(0) = 1$$
+$$f''(x) = -sen(x) \qquad f''(0) = 0$$
+$$f'''(x) = -cos(x) \qquad f'''(0) = -1$$
 
 Su forma queda:
 
@@ -168,10 +168,10 @@ $$sen(x) = 0 + 1(x) + \frac{0}{2!}x² - \frac{x³}{3!} + \frac{0}{4!}x⁴ -  \fr
 
 * Coseno:
 
-$$f(x) = cos(x) \qqquad f(0) = 1$$
-$$f'(x) = -sen(x) \qqquad f'(0) = 0$$
-$$f''(x) = -cos(x) \qqquad f''(0) = -1$$
-$$f'''(x) = sen(x) \qqquad f'''(0) = 0$$
+$$f(x) = cos(x) \qquad f(0) = 1$$
+$$f'(x) = -sen(x) \qquad f'(0) = 0$$
+$$f''(x) = -cos(x) \qquad f''(0) = -1$$
+$$f'''(x) = sen(x) \qquad f'''(0) = 0$$
 
 Su forma queda:
 
@@ -179,10 +179,10 @@ $$cos(x) = 1 + 0(x) - \frac{x²}{2!} + \frac{0}{3!}x³ - \frac{x⁴}{4!} + ... $
 
 * Tangente:
 
-$$f(x) = tan(x) \qqquad f(0) = 0$$
-$$f'(x) = 1+tan²(x) \qqquad f'(0) = 1$$
-$$f''(x) = 2tan(x) + 2tan³(x) \qqquad f''(0) = 0$$
-$$f'''(x) = 2 + 8tan²(x) + 6tan⁴(x) \qqquad f'''(0) = 2$$
+$$f(x) = tan(x) \qquad f(0) = 0$$
+$$f'(x) = 1+tan²(x) \qquad f'(0) = 1$$
+$$f''(x) = 2tan(x) + 2tan³(x) \qquad f''(0) = 0$$
+$$f'''(x) = 2 + 8tan²(x) + 6tan⁴(x) \qquad f'''(0) = 2$$
 
 Su forma queda:
 
