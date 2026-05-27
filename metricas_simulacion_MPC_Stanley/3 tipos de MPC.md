@@ -33,7 +33,7 @@ $$\beta = \arctan(\tan(u_2) \cdot \frac{Lr}{Lf + Lr})$$
 
 # Modelo dinámico de la Bicicleta (Ackermann)
 
-El modelo cinemático solo usa geometría, no considera fuerzas, supone no deslizamiento, y funciona bien a baja velocidad. EL modelo dinámico usa leyes de Newton para considerar fuerzas laterales de las llantas, modela el desplazamiento, y sirve para velocidades altas y maniobras agresivas:
+El modelo cinemático solo usa geometría, no considera fuerzas, supone no deslizamiento, y funciona bien a baja velocidad. El modelo dinámico usa leyes de Newton para considerar fuerzas laterales de las llantas, modela el desplazamiento, y sirve para velocidades altas y maniobras agresivas:
 
 <img width="3481" height="1453" alt="IMG_20260524_055530_edit_81371252409844" src="https://github.com/user-attachments/assets/e81d9522-1105-4def-b89d-3f26b72d96d2" />
 
@@ -153,7 +153,7 @@ $$f^n(x) = e^x \qquad f^n(0) = 1$$
 
 Su forma queda:
 
-$$e^x = 1 + x + \frac{x²}{2!} + \frac{x³}{3!} + ... + \frac{x^n}{n!}
+$$e^x = 1 + x + \frac{x²}{2!} + \frac{x³}{3!} + ... + \frac{x^n}{n!}$$
 
 * Seno:
 
