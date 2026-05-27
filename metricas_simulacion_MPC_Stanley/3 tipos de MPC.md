@@ -214,12 +214,11 @@ $$x = \begin{bmatrix} e_y \\ e_\Psi \end{bmatrix}$$
 
 $$u = \begin{bmatrix} u_2 \end{bmatrix} = \begin{bmatrix} \delta_f \end{bmatrix}$$
 
-Debido a que la velocidad no es variable cambiante, la aceleración no tiene efecto sobre la velocidad. EL primer paso es recordar cuales son las ecuaciones que describen nuestros estados:
+Debido a que la velocidad no es variable cambiante, la aceleración no tiene efecto sobre la velocidad. El primer paso es recordar cuales son las ecuaciones que describen nuestros estados:
 
-1) $\beta = \arctan\left(\tan(u_2) \cdot \frac{L_r}{L_r + L_f}\right)$
-2) $\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$
-   
-$$\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$$
+* $\beta = \arctan\left(\tan(u_2) \cdot \frac{L_r}{L_r + L_f}\right)$ 
+* $\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$ 
+* $\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$ 
 
 Estas ecuaciones son no lineales ya que poseen funciones trigonométricas. Vamos a linearizar aplicando la Serie de Maclaurin a cada función (seno, tangente, y arcotangente) y vamos a tomar solamente la primera derivada que representa nuestro término lineal. Los demás términos ya contienen un exponente mayor a 1:
 
@@ -233,13 +232,13 @@ Por lo tanto, las ecuaciones linealizadas son:
 
 $$\beta \approx u_2 \cdot \frac{L_r}{L_r + L_f}$$
    
-3) Error de orientación:
+2) Error de orientación:
    
-$$\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$$
+$$\dot{e}_\Psi \approx \frac{V_{fixed}}{L_r + L_f} u_2$$
 
 3) Error lateral:
    
-$$\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$$
+$$\dot{e}_y \approx V_{fixed} e_\Psi + V_{fixed} \frac{L_r}{L_r + L_f} u_2$$
 
 
 El siguiente paso es armar la ecuación cinemática linearizada que describa nuestro sistema de error con la forma:
@@ -325,7 +324,66 @@ Se trata de un MPC Lineal Variante en el Tiempo. Este modelo reconoce que la vel
 
 $$x_{k+1} = A(v_k)x_k + B(v_k)u_k$$
 
-El modelo busca seguir una velocidad de referencia que es una entrada externa para el optimizador. Para modficiar la velocidad, se utiliza una función que adapta la velocidad dependiendo de la geometría de las curvas que detecta en el path. EL controlador NO modifica esa velocidad. 
+El modelo busca seguir una velocidad de referencia que es una entrada externa para el optimizador. Para modficiar la velocidad, se utiliza una función que adapta la velocidad dependiendo de la geometría de las curvas que detecta en el path. EL controlador NO modifica esa velocidad. Los estados y entradas son:
+
+$$x = \begin{bmatrix} e_y \\ e_\Psi \\ e_v \end{bmatrix}, \quad u = \begin{bmatrix} u_2 \\ u_1 \end{bmatrix} \to \begin{bmatrix} \delta_f \\ \text{aceleración} \end{bmatrix}$$
+
+Donde el error de velocidad es $e_v = v - v_{ref}$. Las ecuaciones diferenciales continuas de este sistema corresponden con el modelo cinemático de la bicicleta: 
+
+* $\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$
+* $\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$
+* $\dot{e}_v = u_1$
+
+Por lo tanto, las ecuaciones linealizadas son:
+
+1) Beta:
+
+$$\beta \approx u_2 \cdot \frac{L_r}{L_r + L_f}$$
+   
+2) Error de orientación:
+   
+$$\dot{e}_\Psi \approx \frac{V_{k}}{L_r + L_f} u_2$$
+
+3) Error lateral:
+   
+$$\dot{e}_y \approx V_{k} e_\Psi + V_{k} \frac{L_r}{L_r + L_f} u_2$$
+
+4) Error de velocidad:
+
+$$\dot{e}_v = u_1$$
+
+
+Las matrices que satisfacen estas ecuaciones son:
+
+$$\begin{aligned}
+\begin{bmatrix}
+\dot{e}_y \\
+\dot{e}_\Psi \\
+\dot{e}_v
+\end{bmatrix}
+&=
+\begin{bmatrix}
+0 & v_k & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+e_y \\
+e_\Psi \\
+e_v
+\end{bmatrix}
++
+\begin{bmatrix}
+v_k \frac{L_r}{L} & 0 \\
+\frac{v_k}{L} & 0 \\
+0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+u_2 \\
+u_1
+\end{bmatrix}
+\end{aligned}$$
+
 
 * Ventajas: Robusto frente a cambios de velocidad y velocidad media/rápida
 * Desventajas: No sabe por qué debe de frenar. No modifica la velocidad por su cuenta.
@@ -334,15 +392,54 @@ El modelo busca seguir una velocidad de referencia que es una entrada externa pa
 
 El optimizador usa ecuaciones trigonométricas (no lineales) considerando a la velocidad como una variable directa. Vamos a tomar solamente el modelo cinemático para la primera versión del NMPC. Para un vehículo de altas velocidades sí es recomendable tomar el modelo dinámico que toma en consideración el ángulo de deslizamiento y la fricción. 
 
-$$\dot{x} = v \cdot \cos(\Psi + \beta)$$
+A diferencia del MPC lineal o LTV, el NMPC no necesita calcular "errores" relativos para sus ecuaciones dinámicas. Trabaja directamente en las coordenadas globales del mapa $(x, y)$ y la orientación real del coche $(\Psi)$. El vector de estados es:
 
+$$x = \begin{bmatrix}
+x \\
+y \\
+\Psi \\
+v
+\end{bmatrix}$$
 
-$$\dot{y} = v \cdot \sin(\Psi + \beta)$$
+Y los controles son:
 
+$$u = \begin{bmatrix}
+u_1 \\
+u_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+\text{aceleración} \\
+\delta_f
+\end{bmatrix}$$
 
-$$\dot{v} = u_1$$
+Se toma directamente el modelo cinemático no lineal de la bicicleta:
 
-La velocidad y el giro están directamente acoplados en el sistema dinámico. La posición cambiará de forma no lineal, y trata de tomar la mejor ruta que tome en consideración las restricciones dinámicas completas del sistema.
+$$\begin{aligned}
+\begin{bmatrix}
+\dot{x} \\
+\dot{y} \\
+\dot{\Psi} \\
+\dot{v}
+\end{bmatrix}
+&=
+\begin{bmatrix}
+v \cdot \cos(\Psi + \beta) \\
+v \cdot \sin(\Psi + \beta) \\
+\frac{v}{L_r} \sin(\beta) \\
+u_1
+\end{bmatrix}
+\end{aligned}$$
+
+En donde Beta mantiene su no linealidad:
+
+$$\beta = \arctan\left(\tan(u_2) \cdot \frac{L_r}{L}\right)$$
+
+La velocidad y el giro están directamente acoplados en el sistema dinámico. La posición cambiará de forma no lineal, y trata de tomar la mejor ruta que tome en consideración las restricciones dinámicas completas del sistema. El error se calcula dentro de la función de costo:
+
+$$J = \sum_{k=0}^{N} \left( Q_x(x_k - x_{ref,k})^2 + Q_y(y_k - y_{ref,k})^2 + Q_\Psi(\Psi_k - \Psi_{ref,k})^2 + Q_v(v_k - v_{ref,k})^2 \right) + error_terminal$$
+
+A diferencia de las dos versiones anteriores, el NMPC no se puede resolver con OSQP. Se puede utilizar Casadi el cual realiza aproximaciones jacobianas dinámicas.
 
 * Ventajas: Predice trayectorias feasibles y modifica su velocidad en tiempo real.
 * Desventajas: Computacionalmente costoso y sujeto a mínimos locales.
