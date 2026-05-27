@@ -330,9 +330,11 @@ $$x = \begin{bmatrix} e_y \\ e_\Psi \\ e_v \end{bmatrix}, \quad u = \begin{bmatr
 
 Donde el error de velocidad es $e_v = v - v_{ref}$. Las ecuaciones diferenciales continuas de este sistema corresponden con el modelo cinemático de la bicicleta: 
 
-* $\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$
-* $\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$
-* $\dot{e}_v = u_1$
+$$\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$$
+
+$$\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$$
+
+$$\dot{e}_v = u_1$$
 
 Por lo tanto, las ecuaciones linealizadas son:
 
