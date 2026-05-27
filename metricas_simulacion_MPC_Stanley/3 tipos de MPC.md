@@ -431,7 +431,7 @@ $$\beta = \arctan\left(\tan(u_2) \cdot \frac{L_r}{L}\right)$$
 
 La velocidad y el giro están directamente acoplados en el sistema dinámico. La posición cambiará de forma no lineal, y trata de tomar la mejor ruta que tome en consideración las restricciones dinámicas completas del sistema. El error se calcula dentro de la función de costo:
 
-$$J = \sum_{k=0}^{N} \left( Q_x(x_k - x_{ref,k})^2 + Q_y(y_k - y_{ref,k})^2 + Q_\Psi(\Psi_k - \Psi_{ref,k})^2 + Q_v(v_k - v_{ref,k})^2 \right) + error_terminal$$
+$$J = \sum_{k=0}^{N} \left( Q_x(x_k - x_{ref,k})^2 + Q_y(y_k - y_{ref,k})^2 + Q_\Psi(\Psi_k - \Psi_{ref,k})^2 + Q_v(v_k - v_{ref,k})^2 \right) + costo terminal$$
 
 A diferencia de las dos versiones anteriores, el NMPC no se puede resolver con OSQP. Se puede utilizar Casadi el cual realiza aproximaciones jacobianas dinámicas.
 
