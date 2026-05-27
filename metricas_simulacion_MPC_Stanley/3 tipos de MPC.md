@@ -215,19 +215,40 @@ $$u = \begin{bmatrix} u_2 \end{bmatrix} = \begin{bmatrix} \delta_f \end{bmatrix}
 
 Debido a que la velocidad no es variable cambiante, la aceleración no tiene efecto sobre la velocidad. EL primer paso es recordar cuales son las ecuaciones que describen nuestros estados:
 
-1) $\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$
+1) $\beta = \arctan\left(\tan(u_2) \cdot \frac{L_r}{L_r + L_f}\right)$
 2) $\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$
-3) $\beta = \arctan\left(\tan(u_2) \cdot \frac{L_r}{L_r + L_f}\right)$
+3) $\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$
 
 Estas ecuaciones son no lineales ya que poseen funciones trigonométricas. Vamos a linearizar aplicando la Serie de Maclaurin a cada función (seno, tangente, y arcotangente) y vamos a tomar solamente la primera derivada que representa nuestro término lineal. Los demás términos ya contienen un exponente mayor a 1:
 
 1) $$\sin(\alpha) \approx 0 + 1 \cdot (\alpha - 0) = \alpha$$
-2) 
+2) $$\tan(\alpha) \approx 0 + 1 \cdot (\alpha - 0) = \alpha$$
+3) $$\arctan(\alpha) \approx 0 + 1 \cdot (\alpha - 0) = \alpha$$
 
-$$\begin{bmatrix} \dot{e}_y \\ \dot{e}_\psi \end{bmatrix} = \begin{bmatrix} 0 & V_{cte} \\ 0 & 0 \end{bmatrix} \begin{bmatrix} e_y \\ e_\psi \end{bmatrix} + \begin{bmatrix} 0 \\ \frac{V_{cte}}{L} \end{bmatrix} \delta$$
+Por lo tanto, las ecuaciones linealizadas son:
 
-* Ventajas: Muy rápido y fácild e implementar
-* Desventajas: EL modelo deja de ser válido si la velocidad cambia. Además no puede reaccionar a curvas para reducir velocidad
+1) $$\beta \approx u_2 \cdot \frac{L_r}{L_r + L_f}$$
+2) $$\dot{e}_\Psi \approx \frac{V_{fixed}}{L_r + L_f} u_2$$
+3) $$\dot{e}_y \approx V_{fixed} e_\Psi + V_{fixed} \frac{L_r}{L_r + L_f} u_2$$
+
+El siguiente paso es armar la ecuación cinemática linearizada que describa nuestro sistema de error con la forma:
+
+$$\dot{x} = A_c x + B_c u$$
+
+EN nuestro caso, buscar qué valores deben de ir en las matrices A y B para que nos den la ecuaciones linearizadas que acabamos de calcular:
+
+$$\begin{bmatrix} \dot{e}_y \\ \dot{e}_\Psi \end{bmatrix} = \underbrace{\begin{bmatrix} ? & ? \\ ? & ? \end{bmatrix}}_{A_c} \begin{bmatrix} e_y \\ e_\Psi \end{bmatrix} + \underbrace{\begin{bmatrix} ? \\ ? \end{bmatrix}}_{B_c} \begin{bmatrix} u_2 \end{bmatrix}$$
+
+Las ecuaciones a analizar son:
+1) $\dot{e}_y = 0 \cdot e_y + V_{fixed} \cdot e_\Psi + V_{fixed} \frac{L_r}{L} \cdot u_2$
+2) $\dot{e}_\Psi = 0 \cdot e_y + 0 \cdot e_\Psi + \frac{V_{fixed}}{L} \cdot u_2$
+
+Las matrices que cumplen esta ley son:
+
+$$\begin{bmatrix} \dot{e}_y \\ \dot{e}_\Psi \end{bmatrix} = \underbrace{\begin{bmatrix} 0 & V_{fixed} \\ 0 & 0 \end{bmatrix}}_{A_c} \begin{bmatrix} e_y \\ e_\Psi \end{bmatrix} + \underbrace{\begin{bmatrix} V_{fixed} \frac{L_r}{L_r + L_f} \\ \frac{V_{fixed}}{L_r + L_f} \end{bmatrix}}_{B_c} \begin{bmatrix} u_2 \end{bmatrix}$$
+
+* Ventajas: Muy rápido y fácil de implementar
+* Desventajas: El modelo deja de ser válido si la velocidad cambia. Además no puede reaccionar a curvas para reducir velocidad
 
 
 # LTV-MPC
