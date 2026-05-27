@@ -376,8 +376,8 @@ e_v
 \end{bmatrix}
 +
 \begin{bmatrix}
-v_k \frac{L_r}{L} & 0 \\
-\frac{v_k}{L} & 0 \\
+v_k \frac{L_r}{L_r + L_f} & 0 \\
+\frac{v_k}{L_r + L_f} & 0 \\
 0 & 1
 \end{bmatrix}
 \begin{bmatrix}
