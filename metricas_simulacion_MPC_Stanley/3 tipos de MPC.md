@@ -127,8 +127,15 @@ Si $X = a$, entonces:
 
 $$f'(a) = a_1 \qquad a_2 = \frac{f''(a)}{2!} \qquad a_3 = \frac{f'''(a)}{3!} \qquad a_n = \frac{f^{n}(a)}{n!}$$
 
+Esto es porque en cada término original de $(x-a)$, si $x = a$, entonces $(a-a) = 0) y solo queda el número factorial multiplicando a la $a$ de grado 1.
+
 Por lo tanto, la Serie de Taylor se ve así:
 
+$$f(x) = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)² + ... + \frac{f^{n}(a)}{n!}(x-a)^n$$
+
+Es decir:
+
+$$f(x) = \sum_{n=0}^{\infty} \frac{f^{n}(a)}{n!}(x-a)^n$$
 
 
 
