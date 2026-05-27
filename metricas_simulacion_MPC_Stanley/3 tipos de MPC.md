@@ -229,10 +229,18 @@ Estas ecuaciones son no lineales ya que poseen funciones trigonométricas. Vamos
 
 Por lo tanto, las ecuaciones linealizadas son:
 
-1) $\beta \approx u_2 \cdot \frac{L_r}{L_r + L_f}$
-2) $\dot{e}_\Psi \approx \frac{V_{fixed}}{L_r + L_f} u_2$
+1) Beta:
 
-$$\dot{e}_y \approx V_{fixed} e_\Psi + V_{fixed} \frac{L_r}{L_r + L_f} u_2$$
+$$\beta \approx u_2 \cdot \frac{L_r}{L_r + L_f}$$
+   
+3) Error de orientación:
+   
+$$\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$$
+
+3) Error lateral:
+   
+$$\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$$
+
 
 El siguiente paso es armar la ecuación cinemática linearizada que describa nuestro sistema de error con la forma:
 
@@ -270,8 +278,13 @@ $$
 
 
 Las ecuaciones a analizar son:
-1) $\dot{e}_y = 0 \cdot e_y + V_{fixed} \cdot e_\Psi + V_{fixed} \frac{L_r}{L} \cdot u_2$
-2) $\dot{e}_\Psi = 0 \cdot e_y + 0 \cdot e_\Psi + \frac{V_{fixed}}{L} \cdot u_2$
+1)
+
+$$\dot{e}_y = 0 \cdot e_y + V_{fixed} \cdot e_\Psi + V_{fixed} \frac{L_r}{L} \cdot u_2$$
+
+2) 
+
+$$\dot{e}_\Psi = 0 \cdot e_y + 0 \cdot e_\Psi + \frac{V_{fixed}}{L} \cdot u_2$$
 
 Las matrices que cumplen esta ley son:
 
