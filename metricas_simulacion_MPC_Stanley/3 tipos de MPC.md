@@ -218,7 +218,8 @@ Debido a que la velocidad no es variable cambiante, la aceleración no tiene efe
 
 1) $\beta = \arctan\left(\tan(u_2) \cdot \frac{L_r}{L_r + L_f}\right)$
 2) $\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$
-3) $\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$
+   
+$$\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$$
 
 Estas ecuaciones son no lineales ya que poseen funciones trigonométricas. Vamos a linearizar aplicando la Serie de Maclaurin a cada función (seno, tangente, y arcotangente) y vamos a tomar solamente la primera derivada que representa nuestro término lineal. Los demás términos ya contienen un exponente mayor a 1:
 
