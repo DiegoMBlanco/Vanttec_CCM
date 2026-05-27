@@ -231,7 +231,8 @@ Por lo tanto, las ecuaciones linealizadas son:
 
 1) $\beta \approx u_2 \cdot \frac{L_r}{L_r + L_f}$
 2) $\dot{e}_\Psi \approx \frac{V_{fixed}}{L_r + L_f} u_2$
-3) $\dot{e}_y \approx V_{fixed} e_\Psi + V_{fixed} \frac{L_r}{L_r + L_f} u_2$
+
+$$\dot{e}_y \approx V_{fixed} e_\Psi + V_{fixed} \frac{L_r}{L_r + L_f} u_2$$
 
 El siguiente paso es armar la ecuación cinemática linearizada que describa nuestro sistema de error con la forma:
 
