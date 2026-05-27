@@ -79,7 +79,7 @@ Dada una trayectoria de referencia ($x_{ref}, y_{ref}, \Psi_{ref}$), definimos d
 
 $$\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$$
 
-2) $e_\Psi$ (Error de orientación) $= \Psi - \Psi_{ref}$. La taza de cambio del ángulo del error (derivada) corresponde con la del modelo cinemático:
+2) $e_\Psi$ (Error de orientación) $= \Psi - \Psi_{ref}$. La taza de cambio del ángulo del error (velocidad de cambio del ángulo del error) corresponde con la del modelo cinemático:
 
 $$\dot{e}_ \Psi = \dot{\Psi} - \dot{\Psi}_{ref} = \frac{v}{L_r}\sin(\beta)$$
 
@@ -138,7 +138,67 @@ Es decir:
 $$f(x) = \sum_{n=0}^{\infty} \frac{f^{n}(a)}{n!}(x-a)^n$$
 
 
+## Serie de Maclaurin
 
+Es el mismo concepto de la Serie de Taylor pero evaluando $x = a = 0$ y de esta manera igualar funciones trigonométricas con la exponencial base, ya que la derivada de la exponencial es ella misma. SU forma es:
+
+$$f(x) = f(0) + f'(0)(x-0) + \frac{f''(0)}{2!}(x-0)² + ... + \frac{f^{n}(0)}{n!}(x-0)^n$$
+
+* Euler:
+
+$$f(x) = e^x \qqquad f(0) = 1$$
+$$f'(x) = e^x \qqquad f'(0) = 1$$
+$$f''(x) = e^x \qqquad f''(0) = 1$$
+$$f^n(x) = e^x \qqquad f^n(0) = 1$$
+
+Su forma queda:
+
+$$e^x = 1 + x + \frac{x²}{2!} + \frac{x³}{3!} + ... + \frac{x^n}{n!}
+
+* Seno:
+
+$$f(x) = sen(x) \qqquad f(0) = 0$$
+$$f'(x) = cos(x) \qqquad f'(0) = 1$$
+$$f''(x) = -sen(x) \qqquad f''(0) = 0$$
+$$f'''(x) = -cos(x) \qqquad f'''(0) = -1$$
+
+Su forma queda:
+
+$$sen(x) = 0 + 1(x) + \frac{0}{2!}x² - \frac{x³}{3!} + \frac{0}{4!}x⁴ -  \frac{x⁵}{5!} ...$$
+
+* Coseno:
+
+$$f(x) = cos(x) \qqquad f(0) = 1$$
+$$f'(x) = -sen(x) \qqquad f'(0) = 0$$
+$$f''(x) = -cos(x) \qqquad f''(0) = -1$$
+$$f'''(x) = sen(x) \qqquad f'''(0) = 0$$
+
+Su forma queda:
+
+$$cos(x) = 1 + 0(x) - \frac{x²}{2!} + \frac{0}{3!}x³ - \frac{x⁴}{4!} + ... $$
+
+* Tangente:
+
+$$f(x) = tan(x) \qqquad f(0) = 0$$
+$$f'(x) = 1+tan²(x) \qqquad f'(0) = 1$$
+$$f''(x) = 2tan(x) + 2tan³(x) \qqquad f''(0) = 0$$
+$$f'''(x) = 2 + 8tan²(x) + 6tan⁴(x) \qqquad f'''(0) = 2$$
+
+Su forma queda:
+
+$$tan(x) = 0 + 1x + \frac{0}{2!}x^2 + \frac{2}{3!}x^3 + \frac{0}{4!}x^4 + \frac{16}{5!}x^5 + ...$$
+
+
+* Arcotangente:
+
+$$f(0) = 0$$
+$$f'(0) = 1$$
+$$f''(0) = 0$$
+$$f'''(0) = -2$$
+
+Su forma queda:
+
+$$\arctan(x) = 0 + 1x + \frac{0}{2!}x^2 + \frac{-2}{3!}x^3 + \frac{0}{4!}x^4 + \frac{24}{5!}x^5 + ...$$
 
 # MPC Lineal
 
@@ -153,7 +213,16 @@ $$x = \begin{bmatrix} e_y \\ e_\Psi \end{bmatrix}$$
 
 $$u = \begin{bmatrix} u_2 \end{bmatrix} = \begin{bmatrix} \delta_f \end{bmatrix}$$
 
-Debido a que la velocidad no es variable cambiante, la aceleración no tiene efecto sobre la velocidad. 
+Debido a que la velocidad no es variable cambiante, la aceleración no tiene efecto sobre la velocidad. EL primer paso es recordar cuales son las ecuaciones que describen nuestros estados:
+
+1) $\dot{e}_y = v \cdot \sin(e_\Psi + \beta)$
+2) $\dot{e}_\Psi = \frac{v}{L_r} \sin(\beta)$
+3) $\beta = \arctan\left(\tan(u_2) \cdot \frac{L_r}{L_r + L_f}\right)$
+
+Estas ecuaciones son no lineales ya que poseen funciones trigonométricas. Vamos a linearizar aplicando la Serie de Maclaurin a cada función (seno, tangente, y arcotangente) y vamos a tomar solamente la primera derivada que representa nuestro término lineal. Los demás términos ya contienen un exponente mayor a 1:
+
+1) $$\sin(\alpha) \approx 0 + 1 \cdot (\alpha - 0) = \alpha$$
+2) 
 
 $$\begin{bmatrix} \dot{e}_y \\ \dot{e}_\psi \end{bmatrix} = \begin{bmatrix} 0 & V_{cte} \\ 0 & 0 \end{bmatrix} \begin{bmatrix} e_y \\ e_\psi \end{bmatrix} + \begin{bmatrix} 0 \\ \frac{V_{cte}}{L} \end{bmatrix} \delta$$
 
