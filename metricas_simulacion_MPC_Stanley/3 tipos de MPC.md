@@ -405,15 +405,7 @@ v
 
 Y los controles son:
 
-$$u = \begin{bmatrix}
-u_1 \\
-u_2
-\end{bmatrix}
-&=
-\begin{bmatrix}
-\text{aceleración} \\
-\delta_f
-\end{bmatrix}$$
+$$u = \begin{bmatrix} u_2 \\ u_1 \end{bmatrix} \to \begin{bmatrix} \delta_f \\ \text{aceleración} \end{bmatrix}$$
 
 Se toma directamente el modelo cinemático no lineal de la bicicleta:
 
